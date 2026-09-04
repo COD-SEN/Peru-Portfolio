@@ -21,7 +21,7 @@ export function InterestsContent() {
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">Interests and practice</p>
           <h2 className="text-2xl font-bold text-slate-900">Learning should feel possible.</h2>
           <p className="text-sm leading-6 text-slate-600">Brian&apos;s interests sit at the intersection of teaching, communication, inclusion, and learner wellbeing.</p>
-          <Image src="/brian-flyer.jpeg" alt="Brian Peru educational services flyer" width={1080} height={1080} className="mt-2 h-36 w-full rounded-xl object-cover object-top shadow-sm" />
+          <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202026-09-04%20at%2022.37.00-4s3tJ6M0iKdT5g3yPthrwVeAdq96e9.jpeg" alt="Brian Peru in a formal portrait" width={1080} height={1080} className="mt-2 h-36 w-full rounded-xl object-cover object-top shadow-sm" />
         </div>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">

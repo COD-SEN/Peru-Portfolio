@@ -19,7 +19,7 @@ const projects = [
     icon: Table2,
     gradient: "from-amber-400 to-orange-600",
     tags: ["Mathematics", "Physics", "Tutoring"],
-    image: "/brian-flyer.jpeg",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202026-09-04%20at%2022.37.00-4s3tJ6M0iKdT5g3yPthrwVeAdq96e9.jpeg",
   },
   {
     title: "KSL Communication Support",
@@ -27,7 +27,7 @@ const projects = [
     icon: GitBranch,
     gradient: "from-emerald-400 to-teal-700",
     tags: ["KSL", "Communication", "Accessibility"],
-    image: "/brian-classroom.jpeg",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202026-09-04%20at%2022.37.31-hwMwZPmFrxy0tZZgzeAqFdYwHQVlsa.jpeg",
   },
   {
     title: "Learner Confidence and Independence",
@@ -35,7 +35,7 @@ const projects = [
     icon: Briefcase,
     gradient: "from-violet-400 to-purple-700",
     tags: ["Life Skills", "Mentoring", "Wellbeing"],
-    image: "/brian-flyer.jpeg",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202026-09-04%20at%2022.37.29-3Ces3U8BwNLQiXlDRCF2kuWcIUrePx.jpeg",
   },
   /*
   {
