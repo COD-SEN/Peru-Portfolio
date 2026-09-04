@@ -9,7 +9,7 @@ export function ProfileContent() {
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border-2 border-blue-200 shadow-md">
-          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202026-09-04%20at%2022.37.00-4s3tJ6M0iKdT5g3yPthrwVeAdq96e9.jpeg" alt="Brian Peru in a formal portrait" className="h-full w-full object-cover object-center bg-gray-100" />
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202026-09-04%20at%2022.37.00-4s3tJ6M0iKdT5g3yPthrwVeAdq96e9.jpeg" alt="Brian Peru in a formal portrait" className="h-full w-full object-cover object-[50%_25%] bg-gray-100" />
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Brian Peru</h2>

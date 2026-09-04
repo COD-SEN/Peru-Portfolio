@@ -162,7 +162,7 @@ export function ProjectsContent() {
                     src={selectedProject.image}
                     alt={selectedProject.title}
                     fill
-                    className="object-cover object-center bg-gray-100"
+                    className="object-cover object-[50%_25%] bg-gray-100"
                     priority
                   />
                 </div>
