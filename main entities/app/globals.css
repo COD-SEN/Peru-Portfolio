@@ -1,0 +1,303 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Modern Windows 11 color scheme with vibrant gradients */
+  --win11-primary: #0067c0;
+  --win11-accent: #0078d4;
+  --win11-purple: #8b5cf6;
+  --win11-pink: #ec4899;
+  --win11-blue: #3b82f6;
+  --win11-teal: #14b8a6;
+
+  --background: oklch(0.98 0.005 240);
+  --foreground: oklch(0.15 0.01 240);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0.01 240);
+  --popover: oklch(0.98 0.005 240);
+  --popover-foreground: oklch(0.15 0.01 240);
+  --primary: oklch(0.5 0.2 250);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0.01 240);
+  --secondary-foreground: oklch(0.2 0.01 240);
+  --muted: oklch(0.95 0.01 240);
+  --muted-foreground: oklch(0.5 0.01 240);
+  --accent: oklch(0.65 0.25 280);
+  --accent-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0.01 240);
+  --input: oklch(0.9 0.01 240);
+  --ring: oklch(0.55 0.2 250);
+  --chart-1: oklch(0.55 0.22 280);
+  --chart-2: oklch(0.65 0.18 220);
+  --chart-3: oklch(0.6 0.15 190);
+  --chart-4: oklch(0.7 0.2 320);
+  --chart-5: oklch(0.75 0.19 80);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.98 0.005 240);
+  --sidebar-foreground: oklch(0.15 0.01 240);
+  --sidebar-primary: oklch(0.5 0.2 250);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.96 0.01 240);
+  --sidebar-accent-foreground: oklch(0.2 0.01 240);
+  --sidebar-border: oklch(0.9 0.01 240);
+  --sidebar-ring: oklch(0.55 0.2 250);
+}
+
+.dark {
+  --background: oklch(0.12 0.01 240);
+  --foreground: oklch(0.98 0.005 240);
+  --card: oklch(0.15 0.01 240);
+  --card-foreground: oklch(0.98 0.005 240);
+  --popover: oklch(0.12 0.01 240);
+  --popover-foreground: oklch(0.98 0.005 240);
+  --primary: oklch(0.6 0.22 260);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.2 0.01 240);
+  --secondary-foreground: oklch(0.98 0.005 240);
+  --muted: oklch(0.18 0.01 240);
+  --muted-foreground: oklch(0.6 0.01 240);
+  --accent: oklch(0.7 0.25 280);
+  --accent-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.5 0.22 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.25 0.01 240);
+  --input: oklch(0.25 0.01 240);
+  --ring: oklch(0.6 0.22 260);
+  --chart-1: oklch(0.6 0.24 280);
+  --chart-2: oklch(0.7 0.2 220);
+  --chart-3: oklch(0.65 0.17 190);
+  --chart-4: oklch(0.75 0.22 320);
+  --chart-5: oklch(0.8 0.21 80);
+  --sidebar: oklch(0.15 0.01 240);
+  --sidebar-foreground: oklch(0.98 0.005 240);
+  --sidebar-primary: oklch(0.6 0.22 260);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.2 0.01 240);
+  --sidebar-accent-foreground: oklch(0.98 0.005 240);
+  --sidebar-border: oklch(0.25 0.01 240);
+  --sidebar-ring: oklch(0.6 0.22 260);
+}
+
+@theme inline {
+  --font-sans: "Geist", "Geist Fallback";
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --animate-float-in: float-in 0.6s ease-out forwards;
+  --animate-gradient-shift: gradient-shift 15s ease infinite;
+  --animate-shimmer: shimmer 2s infinite;
+  --animate-marquee: marquee 60s linear infinite;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@keyframes float-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(91, 33, 182, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(91, 33, 182, 0.5);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Windows 11 Acrylic/Glass effect */
+.win11-glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(40px) saturate(180%) contrast(1.1);
+  -webkit-backdrop-filter: blur(40px) saturate(180%) contrast(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.win11-glass-dark {
+  background: rgba(30, 30, 30, 0.75);
+  backdrop-filter: blur(40px) saturate(180%) contrast(1.1);
+  -webkit-backdrop-filter: blur(40px) saturate(180%) contrast(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Modern button styles */
+.win11-button {
+  background: linear-gradient(135deg, oklch(0.55 0.22 260) 0%, oklch(0.65 0.25 280) 100%);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(91, 33, 182, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.win11-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(91, 33, 182, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.win11-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(91, 33, 182, 0.2), inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon container with modern look */
+.win11-icon {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.75));
+  backdrop-filter: blur(10px) saturate(1.2);
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.win11-icon:hover {
+  transform: scale(1.08) translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Taskbar styling */
+.win11-taskbar {
+  background: rgba(243, 243, 243, 0.85);
+  backdrop-filter: blur(40px) saturate(190%) contrast(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(190%) contrast(1.05);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Window styling */
+.win11-window {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(40px) saturate(180%) contrast(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(180%) contrast(1.05);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+}
+
+.win11-window-title {
+  background: linear-gradient(135deg, oklch(0.98 0.005 240) 0%, oklch(0.96 0.01 240) 100%);
+  backdrop-filter: blur(40px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Animated gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 25%, #ec4899 50%, #f59e0b 75%, #3b82f6 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 8s ease infinite;
+}
+
+/* Loading screen enhancements */
+.loading-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
