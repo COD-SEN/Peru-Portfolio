@@ -19,7 +19,14 @@ const MIME_TYPES: Record<string, string> = {
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { path: segments } = await params
-  const relativePath = segments.join("/")
+  let relativePath: string
+
+  try {
+    relativePath = segments.map((segment) => decodeURIComponent(segment)).join("/")
+  } catch {
+    return new NextResponse("Not found", { status: 404 })
+  }
+
   const documentsRoot = path.resolve(process.cwd(), "public/documents")
   const filePath = path.resolve(documentsRoot, relativePath)
 
@@ -31,7 +38,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const file = await readFile(filePath)
     const extension = path.extname(filePath).toLowerCase()
     const filename = path.basename(filePath).replace(/["\\\r\n]/g, "_")
-    const disposition = extension === ".docx" ? "attachment" : "inline"
+    const disposition = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx"].includes(extension) ? "attachment" : "inline"
     return new NextResponse(file, {
       headers: {
         "Content-Type": MIME_TYPES[extension] || "application/octet-stream",

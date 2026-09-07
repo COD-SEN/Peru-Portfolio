@@ -34,7 +34,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     const file = await readFile(filePath)
     const extension = path.extname(filePath).toLowerCase()
     const filename = path.basename(filePath).replace(/["\\\r\n]/g, "_")
-    const disposition = extension === ".docx" ? "attachment" : "inline"
+    const disposition = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx"].includes(extension) ? "attachment" : "inline"
     return new NextResponse(file, {
       headers: {
         "Content-Type": MIME_TYPES[extension] || "application/octet-stream",
