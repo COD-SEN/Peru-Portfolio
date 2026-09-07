@@ -4,6 +4,10 @@ import { useMemo, useState } from "react"
 import Image from "next/image"
 import { Download, FileImage, FileText, Maximize2, X } from "lucide-react"
 
+const getDocumentUrl = (file: string, type: "pdf" | "docx" | "image") => type === "image" ? file : `/api${file}`
+
+const getDownloadName = (file: string) => decodeURIComponent(file.split("/").pop() || "document")
+
 const documents = [
   { name: "Brian KCPE Certificate", file: "/documents/PERU%20DOCS/Brian%20KCPE%20cert.pdf", type: "pdf", category: "Education" },
   { name: "Brian Peru CV", file: "/documents/PERU%20DOCS/Brian_Peru_CV_docc.docx", type: "docx", category: "Career" },
@@ -63,10 +67,10 @@ export function DocumentsContent() {
           <div className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
             <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-6">
               <div className="min-w-0"><p className="truncate text-sm font-bold text-slate-900">{selected.name}</p><p className="text-xs text-slate-500">{selected.category} · {selected.type.toUpperCase()}</p></div>
-              <div className="flex items-center gap-1"><a href={selected.type === "image" ? selected.file : `/api${selected.file}`} download="" target="_self" rel="noopener noreferrer" className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900" aria-label={`Download ${selected.name}`}><Download className="size-4" /></a><button type="button" onClick={() => setSelected(null)} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900" aria-label="Close document viewer"><X className="size-5" /></button></div>
+              <div className="flex items-center gap-1"><a href={getDocumentUrl(selected.file, selected.type)} download={getDownloadName(selected.file)} target="_self" rel="noopener noreferrer" className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900" aria-label={`Download ${selected.name}`}><Download className="size-4" /></a><button type="button" onClick={() => setSelected(null)} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900" aria-label="Close document viewer"><X className="size-5" /></button></div>
             </div>
             <div className="flex min-h-0 flex-1 items-center justify-center overflow-auto bg-slate-100 p-3 sm:p-6">
-              {selected.type === "image" ? <Image src={selected.file} alt={selected.name} width={1400} height={1000} className="max-h-[72vh] w-auto object-contain shadow-lg" /> : selected.type === "pdf" ? <iframe src={`/api${selected.file}`} title={selected.name} className="h-[72vh] w-full rounded-lg bg-white" /> : <div className="flex max-w-md flex-col items-center gap-4 rounded-xl bg-white p-8 text-center shadow-sm"><FileText className="size-12 text-slate-400" /><div><h3 className="font-bold text-slate-900">Word document ready</h3><p className="mt-1 text-sm leading-6 text-slate-500">This format is preserved in the archive. Download it to view the original document in Microsoft Word or another compatible editor.</p></div><a href={`/api${selected.file}`} download="" target="_self" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"><Download className="size-4" /> Download original</a></div>}
+              {selected.type === "image" ? <Image src={selected.file} alt={selected.name} width={1400} height={1000} className="max-h-[72vh] w-auto object-contain shadow-lg" /> : selected.type === "pdf" ? <iframe src={getDocumentUrl(selected.file, selected.type)} title={selected.name} className="h-[72vh] w-full rounded-lg bg-white" /> : <div className="flex max-w-md flex-col items-center gap-4 rounded-xl bg-white p-8 text-center shadow-sm"><FileText className="size-12 text-slate-400" /><div><h3 className="font-bold text-slate-900">Word document ready</h3><p className="mt-1 text-sm leading-6 text-slate-500">This format is preserved in the archive. Download it to view the original document in Microsoft Word or another compatible editor.</p></div><a href={getDocumentUrl(selected.file, selected.type)} download={getDownloadName(selected.file)} target="_self" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"><Download className="size-4" /> Download original</a></div>}
             </div>
             <div className="flex items-center gap-2 border-t border-slate-200 px-4 py-2 text-xs text-slate-500"><Maximize2 className="size-3.5" /> Clicked files open in this viewer; originals remain downloadable.</div>
           </div>

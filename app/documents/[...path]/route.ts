@@ -23,10 +23,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const file = await readFile(filePath)
     const extension = path.extname(filePath).toLowerCase()
+    const filename = path.basename(filePath).replace(/["\\\r\n]/g, "_")
+    const disposition = extension === ".docx" ? "attachment" : "inline"
     return new NextResponse(file, {
       headers: {
         "Content-Type": MIME_TYPES[extension] || "application/octet-stream",
-        "Content-Disposition": `inline; filename="${path.basename(filePath).replace(/["\\\r\n]/g, "_")}"`,
+        "Content-Disposition": `${disposition}; filename="${filename}"`,
         "Cache-Control": "public, max-age=3600",
       },
     })
