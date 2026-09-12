@@ -15,7 +15,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: "#0067c0",
+  themeColor: "#1769e0",
 }
 
 export const metadata: Metadata = {
@@ -47,22 +47,19 @@ export const metadata: Metadata = {
   verification: {
     google: "google9efaad4f8be5d079",
   },
+  manifest: "/manifest.webmanifest",
   icons: {
     icon: [
-      {
-        url: "/apple-icon.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/apple-icon.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/apple-icon.png",
-        type: "image/png",
-      },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/brian-peru-mark.svg", type: "image/svg+xml" },
     ],
-    apple: "/apple-icon.png",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "Brian Peru",
+    statusBarStyle: "default",
   },
 }
 
