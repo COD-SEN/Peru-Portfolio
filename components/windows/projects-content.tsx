@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Table2, GitBranch, Briefcase, Heart, X } from "lucide-react"
 
-const projects = [
+const fallbackProjects = [
   {
     title: "Inclusive Learning Support Plans",
     description: "Learner-centred support plans for autism, dyslexia, ADHD, hearing impairment, and diverse learning needs, with clear goals, classroom adjustments, and progress evidence.",
@@ -89,8 +89,40 @@ const projects = [
   */
 ]
 
+type Project = (typeof fallbackProjects)[number]
+
+type CmsProject = {
+  id: string
+  title: string
+  description: string
+  url: string | null
+  image_url: string | null
+  technologies: string[]
+}
+
 export function ProjectsContent() {
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [projects, setProjects] = useState<Project[]>(fallbackProjects)
+
+  useEffect(() => {
+    let active = true
+    fetch("/api/cms/projects")
+      .then((response) => response.ok ? response.json() : null)
+      .then((payload: { items?: CmsProject[]; projects?: CmsProject[] } | null) => {
+        const publishedProjects = payload?.items ?? payload?.projects ?? []
+        if (!active || !publishedProjects.length) return
+        setProjects(publishedProjects.map((project, index) => ({
+          title: project.title,
+          description: project.description,
+          icon: [Heart, Table2, GitBranch, Briefcase][index % 4],
+          gradient: ["from-blue-500 to-indigo-700", "from-amber-400 to-orange-600", "from-emerald-400 to-teal-700", "from-violet-400 to-purple-700"][index % 4],
+          tags: project.technologies,
+          image: project.image_url || "/placeholder.svg",
+        })))
+      })
+      .catch(() => undefined)
+    return () => { active = false }
+  }, [])
 
   return (
     <>

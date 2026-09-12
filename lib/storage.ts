@@ -17,8 +17,24 @@ export interface SocialProfile {
 const SETTINGS_KEY = "portfolio-settings"
 
 export async function saveSettings(settings: PortfolioSettings): Promise<void> {
-  if (typeof window !== "undefined") {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))
+  if (typeof window === "undefined") return
+
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))
+
+  try {
+    await fetch("/api/cms/settings", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        display_name: settings.userName || "Portfolio Owner",
+        headline: settings.userTitle || "Creative Developer",
+        avatar_url: settings.userAvatar || null,
+        background_url: settings.desktopBackground || settings.loadingBackground || null,
+        is_published: true,
+      }),
+    })
+  } catch {
+    // Browser-local settings remain available if the CMS session is offline.
   }
 }
 
@@ -26,11 +42,17 @@ export function getSettings(): PortfolioSettings {
   if (typeof window !== "undefined") {
     const stored = localStorage.getItem(SETTINGS_KEY)
     if (stored) {
-      const parsed = JSON.parse(stored) as PortfolioSettings
-      if (parsed.userName?.toUpperCase().includes("MARIE") || parsed.userTitle?.toLowerCase().includes("data analyst")) {
-        return { ...parsed, userName: "BRIAN", userTitle: "Special Needs Education", userAvatar: undefined }
+      try {
+        const parsed = JSON.parse(stored) as PortfolioSettings
+        if (parsed && typeof parsed === "object") {
+          if (parsed.userName?.toUpperCase().includes("MARIE") || parsed.userTitle?.toLowerCase().includes("data analyst")) {
+            return { ...parsed, userName: "BRIAN", userTitle: "Special Needs Education", userAvatar: undefined }
+          }
+          return parsed
+        }
+      } catch {
+        localStorage.removeItem(SETTINGS_KEY)
       }
-      return parsed
     }
   }
   return {

@@ -4,26 +4,43 @@ import path from "node:path"
 
 const MIME_TYPES: Record<string, string> = {
   ".pdf": "application/pdf",
+  ".doc": "application/msword",
   ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ".xls": "application/vnd.ms-excel",
+  ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ".ppt": "application/vnd.ms-powerpoint",
+  ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
   ".png": "image/png",
+  ".gif": "image/gif",
+  ".webp": "image/webp",
+  ".txt": "text/plain; charset=utf-8",
+  ".csv": "text/csv; charset=utf-8",
 }
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { path: segments } = await params
+  let relative: string
+  try {
+    relative = segments.map((segment) => decodeURIComponent(segment)).join("/")
+  } catch {
+    return new NextResponse("Not found", { status: 404 })
+  }
+
   const root = path.resolve(process.cwd(), "public/documents")
-  const relative = segments.map((segment) => decodeURIComponent(segment)).join("/")
   const filePath = path.resolve(root, relative)
   if (!filePath.startsWith(`${root}${path.sep}`)) return new NextResponse("Not found", { status: 404 })
 
   try {
     const file = await readFile(filePath)
     const extension = path.extname(filePath).toLowerCase()
+    const filename = path.basename(filePath).replace(/["\\\r\n]/g, "_")
+    const disposition = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx"].includes(extension) ? "attachment" : "inline"
     return new NextResponse(file, {
       headers: {
         "Content-Type": MIME_TYPES[extension] || "application/octet-stream",
-        "Content-Disposition": `inline; filename="${path.basename(filePath).replace(/["\\\r\n]/g, "_")}"`,
+        "Content-Disposition": `${disposition}; filename="${filename}"`,
         "Cache-Control": "public, max-age=3600",
       },
     })

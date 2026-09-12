@@ -14,8 +14,8 @@ const InterestsContent = lazy(() => import("@/components/windows/interests-conte
 const AmbitionsContent = lazy(() => import("@/components/windows/ambitions-content").then(m => ({ default: m.AmbitionsContent })))
 const ContactContent = lazy(() => import("@/components/windows/contact-content").then(m => ({ default: m.ContactContent })))
 const DocumentsContent = lazy(() => import("@/components/windows/documents-content").then(m => ({ default: m.DocumentsContent })))
+const CmsManagerContent = lazy(() => import("@/components/windows/cms-manager-content").then(m => ({ default: m.CmsManagerContent })))
 import { Taskbar } from "@/components/taskbar"
-import { SettingsPanel } from "@/components/settings-panel"
 import { PasswordDialog } from "@/components/password-dialog"
 import { getSettings } from "@/lib/storage"
 import {
@@ -40,7 +40,6 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
   const [openWindows, setOpenWindows] = useState<string[]>([])
   const [activeWindow, setActiveWindow] = useState<string | null>(null)
   const [minimizedWindows, setMinimizedWindows] = useState<string[]>([])
-  const [showSettings, setShowSettings] = useState(false)
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [desktopBackground, setDesktopBackground] = useState<string | null>(null)
@@ -109,22 +108,13 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
     [],
   )
 
-  const handleSettingsUpdate = () => {
-    const settings = getSettings()
-    if (settings.desktopBackground) {
-      setDesktopBackground(settings.desktopBackground)
-    } else {
-      setDesktopBackground("/brian-desktop-background.png")
-    }
-  }
-
-  const handleSettingsClick = () => {
+  const handleCmsClick = () => {
     setShowPasswordDialog(true)
   }
 
   const handlePasswordSuccess = () => {
     setShowPasswordDialog(false)
-    setShowSettings(true)
+    openWindow("cms")
   }
 
   const windows = [
@@ -135,6 +125,7 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
     { id: "interests", title: "Interests", icon: Heart, content: InterestsContent },
     { id: "ambitions", title: "Education Practice", icon: Target, content: AmbitionsContent },
     { id: "documents", title: "Documents", icon: FolderOpen, content: DocumentsContent },
+    { id: "cms", title: "Portfolio CMS", icon: Settings, content: CmsManagerContent },
     { id: "contact", title: "Contact Me", icon: Mail, content: ContactContent },
   ]
 
@@ -171,10 +162,9 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
               key={window.id}
               icon={window.icon}
               label={window.title}
-              onClick={() => openWindow(window.id)}
+              onClick={() => window.id === "cms" ? handleCmsClick() : openWindow(window.id)}
             />
           ))}
-          <DesktopIcon icon={Settings} label="Settings" onClick={handleSettingsClick} />
         </div>
       </div>
 
@@ -201,7 +191,7 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
         ) : null
       })}
 
-      {/* Start menu with 10 icons (7 windows + settings + restart + logout) */}
+      {/* Start menu with portfolio windows, CMS, restart, and logout */}
       {showStartMenu && (
         <div
           ref={startMenuRef}
@@ -215,7 +205,8 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
                 <button
                   key={window.id}
                   onClick={() => {
-                    openWindow(window.id)
+                    if (window.id === "cms") handleCmsClick()
+                    else openWindow(window.id)
                     setShowStartMenu(false)
                   }}
                   className="flex flex-col items-center gap-1.5 p-2 sm:p-3 rounded-xl hover:bg-white/30 active:bg-white/40 transition-all group"
@@ -230,22 +221,6 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
                   </span>
                 </button>
               ))}
-
-              {/* Settings */}
-              <button
-                onClick={() => {
-                  setShowPasswordDialog(true)
-                  setShowStartMenu(false)
-                }}
-                className="flex flex-col items-center gap-1.5 p-2 sm:p-3 rounded-xl hover:bg-white/30 active:bg-white/40 transition-all group"
-              >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center bg-gradient-to-br from-slate-500 to-gray-700 shadow-md group-hover:scale-110 group-hover:shadow-lg transition-transform">
-                  <Settings className="w-5 h-5 sm:w-6 sm:h-6 text-white" strokeWidth={1.8} />
-                </div>
-                <span className="text-[10px] sm:text-xs font-medium text-gray-800 text-center leading-tight">
-                  Settings
-                </span>
-              </button>
 
               {/* Restart */}
               <button
@@ -311,9 +286,6 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
         />
       )}
 
-      {showSettings && (
-        <SettingsPanel onClose={() => setShowSettings(false)} onUpdate={handleSettingsUpdate} />
-      )}
     </div>
   )
 }

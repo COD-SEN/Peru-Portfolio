@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { X, Upload, ImageIcon, User, Monitor } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,6 +16,25 @@ export function SettingsPanel({ onClose, onUpdate }: SettingsPanelProps) {
   const [settings, setSettings] = useState<PortfolioSettings>(getSettings())
   const [uploading, setUploading] = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    let active = true
+    fetch("/api/cms/settings")
+      .then((response) => response.ok ? response.json() : null)
+      .then((payload) => {
+        if (!active || !payload?.settings) return
+        setSettings((current) => ({
+          ...current,
+          userName: payload.settings.display_name || current.userName,
+          userTitle: payload.settings.headline || current.userTitle,
+          userAvatar: payload.settings.avatar_url || current.userAvatar,
+          desktopBackground: payload.settings.background_url || current.desktopBackground,
+        }))
+      })
+      .catch(() => undefined)
+    return () => { active = false }
+  }, [])
 
   const loadingBgRef = useRef<HTMLInputElement>(null)
   const userAvatarRef = useRef<HTMLInputElement>(null)
@@ -37,10 +56,22 @@ export function SettingsPanel({ onClose, onUpdate }: SettingsPanelProps) {
     }
   }
 
-  const handleInputChange = async (key: keyof PortfolioSettings, value: string) => {
-    const newSettings = { ...settings, [key]: value }
-    setSettings(newSettings)
-    await saveSettings(newSettings)
+  const handleInputChange = (key: keyof PortfolioSettings, value: string) => {
+    setSettings((current) => ({ ...current, [key]: value }))
+  }
+
+  const handleSave = async () => {
+    setSaving(true)
+    setUploadStatus(null)
+    try {
+      await saveSettings(settings)
+      setUploadStatus("Settings saved and published")
+      onUpdate()
+    } catch {
+      setUploadStatus("Settings saved locally, but could not sync to the CMS")
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -200,13 +231,11 @@ export function SettingsPanel({ onClose, onUpdate }: SettingsPanelProps) {
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              onUpdate()
-              onClose()
-            }}
+            onClick={() => void handleSave()}
+            disabled={saving}
             className="bg-[#0055E5] hover:bg-[#003C9C]"
           >
-            Save & Apply
+            {saving ? "Saving..." : "Save & Apply"}
           </Button>
         </div>
       </div>
