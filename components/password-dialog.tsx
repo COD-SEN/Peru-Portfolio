@@ -15,7 +15,7 @@ export function PasswordDialog({ onClose, onSuccess }: PasswordDialogProps) {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  const CORRECT_PASSWORD = "Brian123"
+  const CORRECT_PASSWORD = "Brian1234@"
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
