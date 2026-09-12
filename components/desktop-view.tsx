@@ -31,7 +31,7 @@ import {
   LogOut,
 } from "lucide-react"
 
-class WindowContentBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+class WindowContentBoundary extends Component<{ children: ReactNode; onRecover?: () => void }, { hasError: boolean }> {
   state = { hasError: false }
 
   static getDerivedStateFromError() {
@@ -44,7 +44,7 @@ class WindowContentBoundary extends Component<{ children: ReactNode }, { hasErro
 
   render() {
     if (this.state.hasError) {
-      return <div className="flex h-full min-h-32 items-center justify-center p-6 text-center text-sm text-slate-600"><div><p className="font-semibold text-slate-900">This workspace could not be opened.</p><p className="mt-1">Close this window and try again.</p></div></div>
+      return <div className="flex h-full min-h-32 items-center justify-center p-6 text-center text-sm text-slate-600"><div><p className="font-semibold text-slate-900">This workspace could not be opened.</p><p className="mt-1">Close this window and try again.</p><button type="button" onClick={() => { this.setState({ hasError: false }); this.props.onRecover?.() }} className="mt-4 rounded-md bg-slate-900 px-3 py-2 text-xs font-semibold text-white">Retry workspace</button></div></div>
     }
     return this.props.children
   }
@@ -65,11 +65,26 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
   const startMenuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const settings = getSettings()
-    if (settings.desktopBackground) {
-      setDesktopBackground(settings.desktopBackground)
-    } else {
-      setDesktopBackground("/brian-desktop-background.png")
+    let active = true
+    const fallback = getSettings().desktopBackground || "/brian-desktop-background.png"
+    setDesktopBackground(fallback)
+
+    const controller = new AbortController()
+    const timeout = window.setTimeout(() => controller.abort(), 5000)
+    fetch("/api/portfolio/content", { signal: controller.signal, cache: "no-store" })
+      .then((response) => response.ok ? response.json() : null)
+      .then((payload) => {
+        if (!active || controller.signal.aborted) return
+        const remote = payload?.settings?.background_url
+        if (remote) setDesktopBackground(remote)
+      })
+      .catch(() => undefined)
+      .finally(() => window.clearTimeout(timeout))
+
+    return () => {
+      active = false
+      window.clearTimeout(timeout)
+      controller.abort()
     }
   }, [])
 
@@ -175,7 +190,7 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
 
       {/* Desktop icons -- responsive wrapping grid that fits on screen */}
       <div className="absolute top-14 sm:top-2 left-0 right-0 bottom-14 overflow-y-auto p-2 sm:p-4 md:p-5">
-        <div className="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-2 gap-1 sm:gap-2 w-fit">
+        <div className="grid grid-cols-4 gap-1 sm:grid-cols-2 sm:gap-2 w-fit">
           {windows.map((window) => (
             <DesktopIcon
               key={window.id}
@@ -203,7 +218,7 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
             onMinimize={() => minimizeWindow(window.id)}
             onFocus={() => setActiveWindow(window.id)}
           >
-            <WindowContentBoundary>
+            <WindowContentBoundary key={`${window.id}-${isActive}`} onRecover={() => setActiveWindow(window.id)}>
               <Suspense fallback={<WindowSkeleton />}>
                 <Content />
               </Suspense>

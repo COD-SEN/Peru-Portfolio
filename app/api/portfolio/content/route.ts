@@ -12,7 +12,11 @@ export async function GET() {
     supabase.from("portfolio_documents").select("id,name,description,file_url,file_type,file_size,category,sort_order").eq("is_public", true).order("sort_order", { ascending: true }),
     supabase.from("portfolio_media").select("id,name,description,file_url,file_type,file_size,alt_text,sort_order").eq("visibility", "public").order("sort_order", { ascending: true }),
   ])
-  const error = [settings, projects, sections, skills, experience, documents, media].find((result) => result.error)?.error
-  if (error) return NextResponse.json({ error: "Unable to load portfolio content" }, { status: 500 })
+  const results = [settings, projects, sections, skills, experience, documents, media]
+  const error = results.find((result) => result.error)?.error
+  if (error) {
+    console.error("[v0] Portfolio content query failed", error)
+    return NextResponse.json({ settings: null, projects: [], sections: [], skills: [], experience: [], documents: [], media: [], degraded: true }, { status: 200, headers: { "Cache-Control": "no-store" } })
+  }
   return NextResponse.json({ settings: settings.data, projects: projects.data ?? [], sections: sections.data ?? [], skills: skills.data ?? [], experience: experience.data ?? [], documents: documents.data ?? [], media: media.data ?? [] }, { headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" } })
 }

@@ -21,7 +21,12 @@ export async function POST(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return NextResponse.json({ error: "Authentication required" }, { status: 401 })
 
-    const formData = await request.formData()
+    let formData: FormData
+    try {
+      formData = await request.formData()
+    } catch {
+      return NextResponse.json({ error: "Invalid multipart upload" }, { status: 400 })
+    }
     const file = formData.get("file")
     if (!(file instanceof File) || file.size === 0) return NextResponse.json({ error: "No file provided" }, { status: 400 })
     if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: "File is too large (maximum 100 MB)" }, { status: 413 })
