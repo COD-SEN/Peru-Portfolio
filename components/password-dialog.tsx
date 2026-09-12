@@ -15,22 +15,30 @@ export function PasswordDialog({ onClose, onSuccess }: PasswordDialogProps) {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  const CORRECT_PASSWORD = "Brian1234@"
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
 
-    // Simulate a small delay for better UX
-    await new Promise((resolve) => setTimeout(resolve, 300))
+    try {
+      const response = await fetch("/api/cms/access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      })
+      const result = await response.json().catch(() => ({}))
 
-    if (password === CORRECT_PASSWORD) {
-      setIsLoading(false)
+      if (!response.ok) {
+        setError(result.error || "Unable to verify password. Try again.")
+        setPassword("")
+        return
+      }
+
       onSuccess()
-    } else {
-      setError("Incorrect password. Try again.")
+    } catch {
+      setError("Unable to verify password. Check your connection and try again.")
       setPassword("")
+    } finally {
       setIsLoading(false)
     }
   }
