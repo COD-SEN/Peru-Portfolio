@@ -32,7 +32,7 @@ const nextConfig = {
       ],
     },
     {
-      source: "/:path((?!_next/static/.*|favicon.ico|apple-icon.png).*)",
+      source: "/:path((?!_next/static/.*|favicon.ico|favicon-16x16.png|favicon-32x32.png|apple-touch-icon.png|icon-192.png|icon-512.png|icon-512-maskable.png|manifest.webmanifest|brian-peru-mark.svg|robots.txt|sitemap.xml).*)",
       headers: [
         {
           key: "Cache-Control",
