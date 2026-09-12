@@ -108,9 +108,10 @@ export function ProjectsContent() {
     let active = true
     fetch("/api/cms/projects")
       .then((response) => response.ok ? response.json() : null)
-      .then((payload: { projects?: CmsProject[] } | null) => {
-        if (!active || !payload?.projects?.length) return
-        setProjects(payload.projects.map((project, index) => ({
+      .then((payload: { items?: CmsProject[]; projects?: CmsProject[] } | null) => {
+        const publishedProjects = payload?.items ?? payload?.projects ?? []
+        if (!active || !publishedProjects.length) return
+        setProjects(publishedProjects.map((project, index) => ({
           title: project.title,
           description: project.description,
           icon: [Heart, Table2, GitBranch, Briefcase][index % 4],

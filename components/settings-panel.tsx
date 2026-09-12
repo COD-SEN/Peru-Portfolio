@@ -16,6 +16,7 @@ export function SettingsPanel({ onClose, onUpdate }: SettingsPanelProps) {
   const [settings, setSettings] = useState<PortfolioSettings>(getSettings())
   const [uploading, setUploading] = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -55,10 +56,22 @@ export function SettingsPanel({ onClose, onUpdate }: SettingsPanelProps) {
     }
   }
 
-  const handleInputChange = async (key: keyof PortfolioSettings, value: string) => {
-    const newSettings = { ...settings, [key]: value }
-    setSettings(newSettings)
-    await saveSettings(newSettings)
+  const handleInputChange = (key: keyof PortfolioSettings, value: string) => {
+    setSettings((current) => ({ ...current, [key]: value }))
+  }
+
+  const handleSave = async () => {
+    setSaving(true)
+    setUploadStatus(null)
+    try {
+      await saveSettings(settings)
+      setUploadStatus("Settings saved and published")
+      onUpdate()
+    } catch {
+      setUploadStatus("Settings saved locally, but could not sync to the CMS")
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -218,13 +231,11 @@ export function SettingsPanel({ onClose, onUpdate }: SettingsPanelProps) {
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              onUpdate()
-              onClose()
-            }}
+            onClick={() => void handleSave()}
+            disabled={saving}
             className="bg-[#0055E5] hover:bg-[#003C9C]"
           >
-            Save & Apply
+            {saving ? "Saving..." : "Save & Apply"}
           </Button>
         </div>
       </div>
