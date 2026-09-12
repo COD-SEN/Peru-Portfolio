@@ -61,14 +61,11 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
   const [minimizedWindows, setMinimizedWindows] = useState<string[]>([])
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
   const [showStartMenu, setShowStartMenu] = useState(false)
-  const [desktopBackground, setDesktopBackground] = useState<string | null>(null)
+  const [desktopBackground, setDesktopBackground] = useState<string | null>(() => getSettings().desktopBackground || "/brian-desktop-background.png")
   const startMenuRef = useRef<HTMLDivElement>(null)
-
+  
   useEffect(() => {
     let active = true
-    const fallback = getSettings().desktopBackground || "/brian-desktop-background.png"
-    setDesktopBackground(fallback)
-
     const controller = new AbortController()
     const timeout = window.setTimeout(() => controller.abort(), 5000)
     fetch("/api/portfolio/content", { signal: controller.signal, cache: "no-store" })

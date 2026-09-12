@@ -245,7 +245,8 @@ body {
   padding: clamp(0.75rem, 4vw, 2.5rem) !important;
   margin-inline: auto !important;
   box-sizing: border-box !important;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .docx-viewer .docx-preview * {
@@ -290,8 +291,12 @@ body {
 .docx-viewer .docx-preview th {
   max-width: 100% !important;
   white-space: normal !important;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   word-break: normal;
+}
+
+.docx-viewer .docx-preview a {
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 767px) {

@@ -24,7 +24,14 @@ export const metadata: Metadata = {
   generator: "Brian Peru Portfolio",
   applicationName: "Brian Peru Portfolio",
   keywords: ["Brian Peru", "Special Needs Education", "Learner Support Teacher", "Inclusive Education"],
-  metadataBase: new URL("https://peru-portfolio-azure.vercel.app"),
+  metadataBase: new URL("https://peru-portfolio-website.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     title: "Brian Peru — Learner Support Teacher",
     description: "A calm, accessible portfolio for Brian Peru's work in learner support and inclusive education.",
