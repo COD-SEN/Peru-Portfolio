@@ -228,23 +228,59 @@ body {
 }
 
 .docx-viewer > .docx-preview {
-  width: min(100%, 816px) !important;
+  width: min(100%, 900px) !important;
+  max-width: 100% !important;
   min-width: 0 !important;
   margin: 0 auto !important;
+  box-sizing: border-box !important;
 }
 
-.docx-viewer .docx-preview section {
+.docx-viewer .docx-preview section,
+.docx-viewer .docx-preview article {
   width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
   min-height: auto !important;
-  padding: clamp(1rem, 4vw, 2.5rem) !important;
-  box-sizing: border-box;
+  height: auto !important;
+  padding: clamp(0.75rem, 4vw, 2.5rem) !important;
+  margin-inline: auto !important;
+  box-sizing: border-box !important;
   overflow-wrap: anywhere;
+}
+
+.docx-viewer .docx-preview * {
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+.docx-viewer .docx-preview img,
+.docx-viewer .docx-preview svg,
+.docx-viewer .docx-preview canvas {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.docx-viewer .docx-preview table {
+  display: table;
+  overflow-wrap: anywhere;
+}
+
+.docx-viewer .docx-preview table td,
+.docx-viewer .docx-preview table th {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .docx-viewer .docx-preview table {
   width: 100% !important;
   max-width: 100% !important;
   table-layout: fixed;
+}
+
+.docx-viewer .docx-preview table td,
+.docx-viewer .docx-preview table th {
+  min-width: 0 !important;
 }
 
 .docx-viewer .docx-preview p,
