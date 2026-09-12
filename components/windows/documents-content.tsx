@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from "react"
 import Image from "next/image"
-import { Download, FileImage, FileText, FileSpreadsheet, Presentation, X } from "lucide-react"
+import { Download, ExternalLink, FileImage, FileText, FileSpreadsheet, Presentation, X } from "lucide-react"
 
-type DocumentType = "pdf" | "doc" | "docx" | "xls" | "xlsx" | "ppt" | "pptx" | "image" | "file"
+type DocumentType = "pdf" | "doc" | "docx" | "xls" | "xlsx" | "ppt" | "pptx" | "txt" | "csv" | "image" | "file"
 type DocumentRecord = { name: string; file: string; type: DocumentType; category: string; description?: string }
 
 const documents: DocumentRecord[] = [
@@ -20,7 +20,7 @@ const documents: DocumentRecord[] = [
 ]
 
 const officeTypes = new Set<DocumentType>(["doc", "docx", "xls", "xlsx", "ppt", "pptx"])
-const formatLabels: Record<DocumentType, string> = { pdf: "PDF", doc: "DOC", docx: "DOCX", xls: "XLS", xlsx: "XLSX", ppt: "PPT", pptx: "PPTX", image: "Image", file: "File" }
+const formatLabels: Record<DocumentType, string> = { pdf: "PDF", doc: "DOC", docx: "DOCX", xls: "XLS", xlsx: "XLSX", ppt: "PPT", pptx: "PPTX", txt: "TXT", csv: "CSV", image: "Image", file: "File" }
 
 function documentUrl(document: DocumentRecord) {
   return document.type === "image" ? document.file : `/api${document.file}`
@@ -90,9 +90,9 @@ export function DocumentsContent() {
         <div className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
           <div className="flex items-start justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-6"><div className="min-w-0"><p className="truncate text-sm font-bold text-slate-900">{selected.name}</p><p className="mt-1 text-xs text-slate-500">{formatLabels[selected.type]} · {selected.category} · Original file</p></div><button type="button" onClick={() => setSelected(null)} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400" aria-label="Close document viewer"><X className="size-5" /></button></div>
           <div className="flex min-h-0 flex-1 items-center justify-center overflow-auto bg-slate-100 p-3 sm:p-6">
-            {selected.type === "image" ? <Image src={selected.file} alt={selected.name} width={1400} height={1000} className="max-h-[65vh] w-auto object-contain shadow-lg" /> : selected.type === "pdf" ? <iframe src={documentUrl(selected)} title={selected.name} className="h-[65vh] w-full rounded-lg bg-white" /> : <div className="flex max-w-lg flex-col items-center gap-4 rounded-xl bg-white p-6 text-center shadow-sm sm:p-10"><FileText className="size-12 text-slate-400" aria-hidden="true" /><div><h3 className="font-bold text-slate-900">Preview unavailable for this file format</h3><p className="mt-2 text-sm leading-6 text-slate-500">Download the original {formatLabels[selected.type]} file to open it in Microsoft Word, Excel, PowerPoint, or another compatible application.</p></div></div>}
+            {selected.type === "image" ? <Image src={selected.file} alt={selected.name} width={1400} height={1000} className="max-h-[65vh] w-auto object-contain shadow-lg" /> : selected.type === "pdf" || selected.type === "txt" || selected.type === "csv" ? <iframe src={documentUrl(selected)} title={selected.name} className="h-[65vh] w-full rounded-lg bg-white" /> : <div className="flex max-w-lg flex-col items-center gap-4 rounded-xl bg-white p-6 text-center shadow-sm sm:p-10"><FileText className="size-12 text-slate-400" aria-hidden="true" /><div><h3 className="font-bold text-slate-900">Preview unavailable for {formatLabels[selected.type]}</h3><p className="mt-2 text-sm leading-6 text-slate-500">This file is ready to download in its original format. Open it with a compatible desktop application to view the full document.</p></div></div>}
           </div>
-          <div className="flex flex-col gap-3 border-t border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6"><p className="text-xs text-slate-500">The original file is preserved and will not be converted.</p><a href={documentUrl(selected)} download={filenameFor(selected)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400"><Download className="size-4" aria-hidden="true" /> Download Document</a></div>
+          <div className="flex flex-col gap-3 border-t border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6"><p className="text-xs text-slate-500">The original {formatLabels[selected.type]} file is preserved.</p><div className="flex flex-wrap gap-2"><a href={documentUrl(selected)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-400"><ExternalLink className="size-4" aria-hidden="true" /> Open new tab</a><a href={documentUrl(selected)} download={filenameFor(selected)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400"><Download className="size-4" aria-hidden="true" /> Download Document</a></div></div>
         </div>
       </div> : null}
     </div>

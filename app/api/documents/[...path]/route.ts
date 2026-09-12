@@ -15,6 +15,8 @@ const MIME_TYPES: Record<string, string> = {
   ".png": "image/png",
   ".gif": "image/gif",
   ".webp": "image/webp",
+  ".txt": "text/plain; charset=utf-8",
+  ".csv": "text/csv; charset=utf-8",
 }
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
