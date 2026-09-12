@@ -11,12 +11,12 @@ type DocumentType = "pdf" | "doc" | "docx" | "xls" | "xlsx" | "ppt" | "pptx" | "
 type DocumentRecord = { name: string; file: string; type: DocumentType; category: string; description?: string }
 
 const documents: DocumentRecord[] = [
-  { name: "Brian KCPE Certificate", file: "/documents/PERU%20DOCS/Brian%20KCPE%20cert.pdf", type: "pdf", category: "Education" },
-  { name: "Brian Peru CV", file: "/documents/PERU%20DOCS/Brian_Peru_CV_docc.docx", type: "docx", category: "Career" },
-  { name: "Njathaini Recommendation Letter", file: "/documents/PERU%20DOCS/Njathaini%202recomm.letter.docx", type: "docx", category: "References" },
-  { name: "Police Clearance Certificate", file: "/documents/PERU%20DOCS/PCC-V6SBWLNWJ-POLICE%20CLEARANCE%20CERTIFICATE%20WK%20(1).pdf", type: "pdf", category: "Verification" },
-  { name: "Peru Resume", file: "/documents/PERU%20DOCS/Peru%20resume.21.docx", type: "docx", category: "Career" },
-  { name: "Peru KCSE Certificate", file: "/documents/PERU%20DOCS/Peru%2CKCSE%20Cert.pdf", type: "pdf", category: "Education" },
+  { name: "Brian KCPE Certificate", file: "/documents/PERU DOCS/Brian KCPE cert.pdf", type: "pdf", category: "Education" },
+  { name: "Brian Peru CV", file: "/documents/PERU DOCS/Brian_Peru_CV_docc.docx", type: "docx", category: "Career" },
+  { name: "Njathaini Recommendation Letter", file: "/documents/PERU DOCS/Njathaini 2recomm.letter.docx", type: "docx", category: "References" },
+  { name: "Police Clearance Certificate", file: "/documents/PERU DOCS/PCC-V6SBWLNWJ-POLICE CLEARANCE CERTIFICATE WK (1).pdf", type: "pdf", category: "Verification" },
+  { name: "Peru Resume", file: "/documents/PERU DOCS/Peru resume.21.docx", type: "docx", category: "Career" },
+  { name: "Peru KCSE Certificate", file: "/documents/PERU DOCS/Peru,KCSE Cert.pdf", type: "pdf", category: "Education" },
   { name: "Brian portrait", file: "/brian-portrait.jpeg", type: "image", category: "Profile" },
   { name: "Brian classroom profile", file: "/brian-classroom.jpeg", type: "image", category: "Profile" },
   { name: "Brian services flyer", file: "/brian-flyer.jpeg", type: "image", category: "Profile" },
@@ -27,11 +27,9 @@ const officeTypes = new Set<DocumentType>(["doc", "docx", "xls", "xlsx", "ppt", 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`
 
 function documentUrl(document: DocumentRecord) {
-  // Build one canonical same-origin URL for every archive item. Decoding first
-  // prevents already-escaped names from being escaped twice, while encodeURI
-  // preserves the folder separators and produces a valid deployed asset URL.
-  const decodedPath = decodeURIComponent(document.file)
-  return encodeURI(decodedPath)
+  // Encode each path segment independently so spaces, commas, and parentheses
+  // are valid in production without changing folder separators or double-encoding.
+  return document.file.split("/").map((segment) => encodeURIComponent(segment)).join("/")
 }
 function filenameFor(document: DocumentRecord) { return decodeURIComponent(document.file.split("/").pop() || document.name) }
 function iconFor(type: DocumentType) { if (type === "image") return FileImage; if (["xls", "xlsx"].includes(type)) return FileSpreadsheet; if (["ppt", "pptx"].includes(type)) return Presentation; return FileText }
