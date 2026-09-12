@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Brian Peru</title>
+  <desc id="desc">Blue B P monogram on a rounded square</desc>
+  <rect width="512" height="512" rx="112" fill="#1769e0"/>
+  <path fill="#fff" d="M132 104h126c80 0 124 39 124 100 0 41-21 72-57 88l74 116h-82l-62-99h-45v99h-78V104Zm78 61v84h44c32 0 49-14 49-42 0-28-17-42-49-42h-44Z"/>
+  <path fill="#dceaff" d="M132 104h78v304h-78z"/>
+</svg>
