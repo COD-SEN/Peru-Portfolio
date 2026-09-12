@@ -32,10 +32,21 @@ export function CmsManagerContent() {
 
   const load = useCallback(async () => {
     setBusy(true)
-    const response = await fetch(`/api/cms/${collection}?manage=true`)
-    const payload = await response.json().catch(() => ({}))
-    setItems(response.ok ? payload.items ?? [] : [])
-    setBusy(false)
+    try {
+      const response = await fetch(`/api/cms/${collection}?manage=true`, { cache: "no-store" })
+      const payload = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        setItems([])
+        setMessage(typeof payload.error === "string" ? payload.error : "Unable to load this collection")
+        return
+      }
+      setItems(Array.isArray(payload.items) ? payload.items : [])
+    } catch {
+      setItems([])
+      setMessage("Unable to reach the CMS. Please try again.")
+    } finally {
+      setBusy(false)
+    }
   }, [collection])
 
   useEffect(() => { void load() }, [load])
@@ -52,18 +63,35 @@ export function CmsManagerContent() {
 
   async function save() {
     setBusy(true); setMessage(null)
-    const payload = { ...draft, ...(draft.technologies !== undefined ? { technologies: String(draft.technologies).split(",").map((value) => value.trim()).filter(Boolean) } : {}) }
-    const response = await fetch(`/api/cms/${collection}`, { method: editingId ? "PATCH" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(editingId ? { ...payload, id: editingId } : payload) })
-    setBusy(false)
-    if (!response.ok) { const result = await response.json().catch(() => ({})); setMessage(result.error || "Unable to save"); return }
-    setMessage("Saved"); resetDraft(); await load()
+    try {
+      const payload = { ...draft, ...(draft.technologies !== undefined ? { technologies: String(draft.technologies).split(",").map((value) => value.trim()).filter(Boolean) } : {}) }
+      const response = await fetch(`/api/cms/${collection}`, { method: editingId ? "PATCH" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(editingId ? { ...payload, id: editingId } : payload) })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok) { setMessage(typeof result.error === "string" ? result.error : "Unable to save"); return }
+      setMessage("Saved"); resetDraft(); await load()
+    } catch {
+      setMessage("Unable to save. Please try again.")
+    } finally {
+      setBusy(false)
+    }
   }
 
   async function remove(id: string) {
     if (!window.confirm("Delete this item? This cannot be undone.")) return
-    setBusy(true)
-    await fetch(`/api/cms/${collection}?id=${encodeURIComponent(id)}`, { method: "DELETE" })
-    await load(); setBusy(false); setMessage("Deleted")
+    setBusy(true); setMessage(null)
+    try {
+      const response = await fetch(`/api/cms/${collection}?id=${encodeURIComponent(id)}`, { method: "DELETE" })
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}))
+        setMessage(typeof result.error === "string" ? result.error : "Unable to delete")
+        return
+      }
+      await load(); setMessage("Deleted")
+    } catch {
+      setMessage("Unable to delete. Please try again.")
+    } finally {
+      setBusy(false)
+    }
   }
 
   async function handleUpload(file: File) {

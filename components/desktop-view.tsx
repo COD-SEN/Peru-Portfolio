@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react"
+import { Component, useState, useEffect, useRef, useCallback, lazy, Suspense, type ErrorInfo, type ReactNode } from "react"
 import { DesktopIcon } from "@/components/desktop-icon"
 import { Window } from "@/components/window"
 import { WindowSkeleton } from "@/components/window-skeleton"
@@ -30,6 +30,25 @@ import {
   RotateCcw,
   LogOut,
 } from "lucide-react"
+
+class WindowContentBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("[v0] Window content crashed", error, info)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <div className="flex h-full min-h-32 items-center justify-center p-6 text-center text-sm text-slate-600"><div><p className="font-semibold text-slate-900">This workspace could not be opened.</p><p className="mt-1">Close this window and try again.</p></div></div>
+    }
+    return this.props.children
+  }
+}
 
 interface DesktopViewProps {
   onRestart: () => void
@@ -184,9 +203,11 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
             onMinimize={() => minimizeWindow(window.id)}
             onFocus={() => setActiveWindow(window.id)}
           >
-            <Suspense fallback={<WindowSkeleton />}>
-              <Content />
-            </Suspense>
+            <WindowContentBoundary>
+              <Suspense fallback={<WindowSkeleton />}>
+                <Content />
+              </Suspense>
+            </WindowContentBoundary>
           </Window>
         ) : null
       })}
