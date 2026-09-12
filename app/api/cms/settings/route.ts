@@ -30,6 +30,7 @@ export async function PUT(request: Request) {
     phone: String(body.phone ?? "").slice(0, 80),
     avatar_url: body.avatar_url ? String(body.avatar_url) : null,
     background_url: body.background_url ? String(body.background_url) : null,
+    loading_background_url: body.loading_background_url ? String(body.loading_background_url) : null,
     theme: ["light", "dark", "system"].includes(body.theme) ? body.theme : "light",
     accent_color: /^#[0-9a-f]{6}$/i.test(String(body.accent_color ?? "")) ? body.accent_color : "#2563eb",
     is_published: Boolean(body.is_published),

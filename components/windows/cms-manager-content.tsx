@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { Plus, RefreshCw, Trash2, Save, Upload, Eye, EyeOff } from "lucide-react"
-import { uploadImage } from "@/lib/storage"
 import { collectionLabels, cmsCollections, type CmsCollection, type CmsRecord } from "@/lib/cms"
 
 type Field = { key: string; label: string; type?: "text" | "textarea" | "number" | "url" | "file"; placeholder?: string }
@@ -15,12 +14,12 @@ const fields: Record<CmsCollection, Field[]> = {
   sections: [{ key: "section_key", label: "Section key", placeholder: "about" }, { key: "title", label: "Title" }, { key: "content", label: "Content", type: "textarea" }],
   skills: [{ key: "name", label: "Skill name" }, { key: "category", label: "Category" }, { key: "level", label: "Proficiency", type: "number" }],
   experience: [{ key: "company", label: "Company" }, { key: "role", label: "Role" }, { key: "start_date", label: "Start date" }, { key: "end_date", label: "End date" }, { key: "description", label: "Description", type: "textarea" }],
-  documents: [{ key: "name", label: "Document name" }, { key: "file_url", label: "File URL", type: "url" }, { key: "file_type", label: "MIME type" }, { key: "category", label: "Category" }],
-  media: [{ key: "name", label: "Media name" }, { key: "file_url", label: "File URL", type: "url" }, { key: "file_type", label: "MIME type" }, { key: "alt_text", label: "Alt text" }],
+  documents: [{ key: "name", label: "Document name" }, { key: "description", label: "Description", type: "textarea" }, { key: "file_url", label: "File URL", type: "url" }, { key: "file_type", label: "MIME type" }, { key: "category", label: "Category" }, { key: "sort_order", label: "Order", type: "number" }],
+  media: [{ key: "name", label: "Media name" }, { key: "description", label: "Description", type: "textarea" }, { key: "file_url", label: "File URL", type: "url" }, { key: "file_type", label: "MIME type" }, { key: "alt_text", label: "Alt text" }, { key: "sort_order", label: "Order", type: "number" }],
 }
 
 function visibilityKey(collection: CmsCollection) {
-  return collection === "projects" ? "is_published" : collection === "documents" ? "is_public" : collection === "media" ? null : "is_visible"
+  return collection === "projects" ? "is_published" : collection === "documents" ? "is_public" : collection === "media" ? "visibility" : "is_visible"
 }
 
 export function CmsManagerContent() {
@@ -70,7 +69,12 @@ export function CmsManagerContent() {
   async function handleUpload(file: File) {
     setBusy(true); setMessage(null)
     try {
-      const url = await uploadImage(file, `cms/${collection}-${Date.now()}-${file.name}`)
+      const formData = new FormData()
+      formData.append("file", file)
+      const response = await fetch("/api/upload", { method: "POST", body: formData })
+      const uploaded = await response.json().catch(() => ({}))
+      if (!response.ok) throw new Error(uploaded.error || "Upload failed")
+      const url = uploaded.url as string
       setDraft((current) => ({ ...current, file_url: url, file_type: file.type || "application/octet-stream", file_size: file.size, name: current.name || file.name }))
       setMessage("Uploaded. Save the record to keep it in the CMS.")
     } catch { setMessage("Upload failed. Choose a smaller supported file.") } finally { setBusy(false) }

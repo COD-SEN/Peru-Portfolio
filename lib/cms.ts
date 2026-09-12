@@ -74,7 +74,9 @@ export function sanitizeCmsPayload(collection: CmsCollection, body: Record<strin
       file_type: String(body.file_type ?? "application/octet-stream").slice(0, 160),
       file_size: Math.max(0, Number(body.file_size) || 0),
       category: String(body.category ?? "Documents").slice(0, 80),
-      is_public: body.is_public === true,
+      description: String(body.description ?? "").slice(0, 2000),
+      sort_order: Number.isInteger(body.sort_order) ? body.sort_order : 0,
+      is_public: body.is_public !== false,
     }
   }
   return {
@@ -83,6 +85,9 @@ export function sanitizeCmsPayload(collection: CmsCollection, body: Record<strin
     file_type: String(body.file_type ?? "application/octet-stream").slice(0, 160),
     file_size: Math.max(0, Number(body.file_size) || 0),
     alt_text: String(body.alt_text ?? "").slice(0, 300),
+    description: String(body.description ?? "").slice(0, 2000),
+    visibility: ["public", "private"].includes(String(body.visibility)) ? String(body.visibility) : "public",
+    sort_order: Number.isInteger(body.sort_order) ? body.sort_order : 0,
   }
 }
 
