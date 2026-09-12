@@ -14,6 +14,7 @@ const InterestsContent = lazy(() => import("@/components/windows/interests-conte
 const AmbitionsContent = lazy(() => import("@/components/windows/ambitions-content").then(m => ({ default: m.AmbitionsContent })))
 const ContactContent = lazy(() => import("@/components/windows/contact-content").then(m => ({ default: m.ContactContent })))
 const DocumentsContent = lazy(() => import("@/components/windows/documents-content").then(m => ({ default: m.DocumentsContent })))
+const CmsManagerContent = lazy(() => import("@/components/windows/cms-manager-content").then(m => ({ default: m.CmsManagerContent })))
 import { Taskbar } from "@/components/taskbar"
 import { SettingsPanel } from "@/components/settings-panel"
 import { PasswordDialog } from "@/components/password-dialog"
@@ -135,6 +136,7 @@ export function DesktopView({ onRestart, onLogout }: DesktopViewProps) {
     { id: "interests", title: "Interests", icon: Heart, content: InterestsContent },
     { id: "ambitions", title: "Education Practice", icon: Target, content: AmbitionsContent },
     { id: "documents", title: "Documents", icon: FolderOpen, content: DocumentsContent },
+    { id: "cms", title: "Portfolio CMS", icon: Settings, content: CmsManagerContent },
     { id: "contact", title: "Contact Me", icon: Mail, content: ContactContent },
   ]
 
