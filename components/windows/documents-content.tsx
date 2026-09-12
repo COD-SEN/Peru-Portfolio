@@ -26,7 +26,12 @@ const formatLabels: Record<DocumentType, string> = { pdf: "PDF", doc: "DOC", doc
 const officeTypes = new Set<DocumentType>(["doc", "docx", "xls", "xlsx", "ppt", "pptx"])
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`
 
-function documentUrl(document: DocumentRecord) { return document.type === "image" ? document.file : `/api${document.file}` }
+function documentUrl(document: DocumentRecord) {
+  // Public portfolio files are deployed as static assets. Use the same source
+  // for every preview so production does not depend on filesystem access in a
+  // serverless API route.
+  return document.file
+}
 function filenameFor(document: DocumentRecord) { return decodeURIComponent(document.file.split("/").pop() || document.name) }
 function iconFor(type: DocumentType) { if (type === "image") return FileImage; if (["xls", "xlsx"].includes(type)) return FileSpreadsheet; if (["ppt", "pptx"].includes(type)) return Presentation; return FileText }
 
