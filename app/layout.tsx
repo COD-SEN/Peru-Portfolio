@@ -13,15 +13,37 @@ const tahoma = Tahoma({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
+  userScalable: true,
   themeColor: "#0067c0",
 }
 
 export const metadata: Metadata = {
   title: "Brian Peru — Learner Support Teacher",
   description: "Brian Peru — Learner Support Teacher specializing in Special Needs and Inclusive Education.",
-  generator: "My app",
+  generator: "Brian Peru Portfolio",
+  applicationName: "Brian Peru Portfolio",
+  keywords: ["Brian Peru", "Special Needs Education", "Learner Support Teacher", "Inclusive Education"],
+  metadataBase: new URL("https://peru-portfolio-website.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: "Brian Peru — Learner Support Teacher",
+    description: "A calm, accessible portfolio for Brian Peru's work in learner support and inclusive education.",
+    type: "website",
+    images: [{ url: "/brian-classroom-background.jpeg", alt: "Brian Peru in a classroom setting" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Brian Peru — Learner Support Teacher",
+    description: "Learner support, inclusive education, and professional resources.",
+    images: ["/brian-classroom-background.jpeg"],
+  },
   verification: {
     google: "google9efaad4f8be5d079",
   },

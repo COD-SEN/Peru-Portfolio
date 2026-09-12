@@ -40,7 +40,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ col
   if (!table) return NextResponse.json({ error: "Unknown collection" }, { status: 404 })
   const { supabase, user } = await getContext()
   if (!user) return NextResponse.json({ error: "Authentication required" }, { status: 401 })
-  const body = await request.json() as Record<string, unknown>
+  let body: Record<string, unknown>
+  try {
+    body = await request.json() as Record<string, unknown>
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
+  }
   const payload = sanitizeCmsPayload(typedCollection, body)
   if (!isValidCmsPayload(typedCollection, payload)) return NextResponse.json({ error: "Please complete the required fields" }, { status: 400 })
   const { data, error } = await supabase.from(table).insert({ user_id: user.id, ...payload }).select().single()

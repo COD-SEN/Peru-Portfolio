@@ -40,9 +40,9 @@ export async function saveSettings(settings: PortfolioSettings): Promise<void> {
 
 export function getSettings(): PortfolioSettings {
   if (typeof window !== "undefined") {
-    const stored = localStorage.getItem(SETTINGS_KEY)
-    if (stored) {
-      try {
+    try {
+      const stored = localStorage.getItem(SETTINGS_KEY)
+      if (stored) {
         const parsed = JSON.parse(stored) as PortfolioSettings
         if (parsed && typeof parsed === "object") {
           if (parsed.userName?.toUpperCase().includes("MARIE") || parsed.userTitle?.toLowerCase().includes("data analyst")) {
@@ -50,8 +50,12 @@ export function getSettings(): PortfolioSettings {
           }
           return parsed
         }
-      } catch {
+      }
+    } catch {
+      try {
         localStorage.removeItem(SETTINGS_KEY)
+      } catch {
+        // Storage may be unavailable in privacy-restricted browsers.
       }
     }
   }

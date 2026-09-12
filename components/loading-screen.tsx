@@ -22,7 +22,13 @@ export function LoadingScreen() {
 
   useEffect(() => {
     const controller = new AbortController()
-    fetch("/api/portfolio/content", { signal: controller.signal })
+    const timeout = window.setTimeout(() => controller.abort(), 5000)
+    const fallback = () => {
+      if (controller.signal.aborted) return
+      setBackgroundImage(getSettings().loadingBackground || "/brian-classroom-background.jpeg")
+    }
+
+    fetch("/api/portfolio/content", { signal: controller.signal, cache: "no-store" })
       .then((response) => response.ok ? response.json() : null)
       .then((payload) => {
         if (controller.signal.aborted) return
@@ -30,10 +36,13 @@ export function LoadingScreen() {
         const local = getSettings().loadingBackground
         setBackgroundImage(remote || local || "/brian-classroom-background.jpeg")
       })
-      .catch(() => {
-        if (!controller.signal.aborted) setBackgroundImage(getSettings().loadingBackground || "/brian-classroom-background.jpeg")
-      })
-    return () => controller.abort()
+      .catch(fallback)
+      .finally(() => window.clearTimeout(timeout))
+
+    return () => {
+      window.clearTimeout(timeout)
+      controller.abort()
+    }
   }, [])
 
   // Smoothly count from 0 to 100 over ~7 seconds
