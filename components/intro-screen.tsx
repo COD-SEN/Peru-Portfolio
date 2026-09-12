@@ -13,10 +13,25 @@ export function IntroScreen({ onEnter }: IntroScreenProps) {
   const [userTitle, setUserTitle] = useState("Special Needs Education")
 
   useEffect(() => {
-    const settings = getSettings()
-    if (settings.userAvatar) setUserAvatar(settings.userAvatar)
-    if (settings.userName) setUserName(settings.userName)
-    if (settings.userTitle) setUserTitle(settings.userTitle)
+    const controller = new AbortController()
+    fetch("/api/portfolio/content", { signal: controller.signal })
+      .then((response) => response.ok ? response.json() : null)
+      .then((payload) => {
+        if (controller.signal.aborted) return
+        const settings = getSettings()
+        const remote = payload?.settings
+        setUserAvatar(remote?.avatar_url || settings.userAvatar || null)
+        setUserName(remote?.display_name || settings.userName || "BRIAN")
+        setUserTitle(remote?.headline || settings.userTitle || "Special Needs Education")
+      })
+      .catch(() => {
+        if (controller.signal.aborted) return
+        const settings = getSettings()
+        if (settings.userAvatar) setUserAvatar(settings.userAvatar)
+        if (settings.userName) setUserName(settings.userName)
+        if (settings.userTitle) setUserTitle(settings.userTitle)
+      })
+    return () => controller.abort()
   }, [])
 
   return (

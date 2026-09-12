@@ -21,12 +21,19 @@ export function LoadingScreen() {
   const [loadingText, setLoadingText] = useState("Initializing system...")
 
   useEffect(() => {
-    const settings = getSettings()
-    if (settings.loadingBackground) {
-      setBackgroundImage(settings.loadingBackground)
-    } else {
-      setBackgroundImage("/brian-classroom-background.jpeg")
-    }
+    const controller = new AbortController()
+    fetch("/api/portfolio/content", { signal: controller.signal })
+      .then((response) => response.ok ? response.json() : null)
+      .then((payload) => {
+        if (controller.signal.aborted) return
+        const remote = payload?.settings?.loading_background_url
+        const local = getSettings().loadingBackground
+        setBackgroundImage(remote || local || "/brian-classroom-background.jpeg")
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setBackgroundImage(getSettings().loadingBackground || "/brian-classroom-background.jpeg")
+      })
+    return () => controller.abort()
   }, [])
 
   // Smoothly count from 0 to 100 over ~7 seconds
