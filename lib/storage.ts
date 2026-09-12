@@ -42,11 +42,17 @@ export function getSettings(): PortfolioSettings {
   if (typeof window !== "undefined") {
     const stored = localStorage.getItem(SETTINGS_KEY)
     if (stored) {
-      const parsed = JSON.parse(stored) as PortfolioSettings
-      if (parsed.userName?.toUpperCase().includes("MARIE") || parsed.userTitle?.toLowerCase().includes("data analyst")) {
-        return { ...parsed, userName: "BRIAN", userTitle: "Special Needs Education", userAvatar: undefined }
+      try {
+        const parsed = JSON.parse(stored) as PortfolioSettings
+        if (parsed && typeof parsed === "object") {
+          if (parsed.userName?.toUpperCase().includes("MARIE") || parsed.userTitle?.toLowerCase().includes("data analyst")) {
+            return { ...parsed, userName: "BRIAN", userTitle: "Special Needs Education", userAvatar: undefined }
+          }
+          return parsed
+        }
+      } catch {
+        localStorage.removeItem(SETTINGS_KEY)
       }
-      return parsed
     }
   }
   return {
