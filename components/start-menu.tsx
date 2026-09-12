@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { User, FolderOpen, FileText, Share2, Heart, Target, Mail, Settings, ChevronRight, Clock } from "lucide-react"
+import { User, FolderOpen, FileText, Share2, Heart, Target, Mail, ChevronRight, Clock } from "lucide-react"
 import { Window } from "@/components/window"
 import { ProfileContent } from "@/components/windows/profile-content"
 import { ProjectsContent } from "@/components/windows/projects-content"
@@ -10,13 +10,11 @@ import { SocialsContent } from "@/components/windows/socials-content"
 import { InterestsContent } from "@/components/windows/interests-content"
 import { AmbitionsContent } from "@/components/windows/ambitions-content"
 import { ContactContent } from "@/components/windows/contact-content"
-import { SettingsPanel } from "@/components/settings-panel"
 
 export function StartMenu() {
   const [openWindows, setOpenWindows] = useState<string[]>([])
   const [activeWindow, setActiveWindow] = useState<string | null>(null)
   const [minimizedWindows, setMinimizedWindows] = useState<string[]>([])
-  const [showSettings, setShowSettings] = useState(false)
   const [backgroundImage, setBackgroundImage] = useState<string | null>("/images/screenshot-202026-01-01-20234810.png?v=" + Date.now())
 
   const openWindow = (id: string) => {
@@ -119,10 +117,10 @@ export function StartMenu() {
               <div className="font-semibold text-left">Education Practice</div>
             </button>
             <button
-              onClick={() => setShowSettings(true)}
+              onClick={() => openWindow("socials")}
               className="w-full px-4 py-2 flex items-center gap-3 text-white hover:bg-[#3A6FE8] transition-colors"
             >
-              <Settings className="w-6 h-6" />
+              <Share2 className="w-6 h-6" />
               <div className="font-semibold text-left">Music Player</div>
             </button>
           </div>
@@ -170,10 +168,10 @@ export function StartMenu() {
             </button>
             <div className="my-1 h-px bg-gray-300" />
             <button
-              onClick={() => setShowSettings(true)}
+              onClick={() => openWindow("contact")}
               className="w-full px-3 py-2 flex items-center gap-3 text-gray-800 hover:bg-[#3168D5] hover:text-white transition-colors rounded"
             >
-              <Settings className="w-5 h-5" />
+              <Mail className="w-5 h-5" />
               <div className="font-semibold text-sm">Command Prompt</div>
             </button>
             <button
@@ -273,7 +271,6 @@ export function StartMenu() {
         ) : null
       })}
 
-      {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} onUpdate={() => {}} />}
     </div>
   )
 }
