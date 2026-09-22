@@ -13,7 +13,6 @@ type DocumentRecord = { name: string; file: string; type: DocumentType; category
 const documents: DocumentRecord[] = [
   { name: "Brian Peru CV (Updated)", file: "/Brian-Peru-CV-Updated.pdf", type: "pdf", category: "Career" },
   { name: "Brian KCPE Certificate", file: "/documents/PERU DOCS/Brian KCPE cert.pdf", type: "pdf", category: "Education" },
-  { name: "Brian Peru CV", file: "/documents/PERU DOCS/Brian_Peru_CV_docc.docx", type: "docx", category: "Career" },
   { name: "Njathaini Recommendation Letter", file: "/documents/PERU DOCS/Njathaini 2recomm.letter.docx", type: "docx", category: "References" },
   { name: "Police Clearance Certificate", file: "/documents/PERU DOCS/PCC-V6SBWLNWJ-POLICE CLEARANCE CERTIFICATE WK (1).pdf", type: "pdf", category: "Verification" },
   { name: "Peru Resume", file: "/documents/PERU DOCS/Peru resume.21.docx", type: "docx", category: "Career" },
