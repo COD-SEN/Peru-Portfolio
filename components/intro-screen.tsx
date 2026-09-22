@@ -92,7 +92,7 @@ export function IntroScreen({ onEnter }: IntroScreenProps) {
 
         {/* User info - non-clickable */}
         <div className="text-center">
-          <h2 className="text-xl sm:text-3xl md:text-5xl font-bold text-white drop-shadow-lg tracking-tight">
+          <h2 className="whitespace-nowrap text-[clamp(1.25rem,9vw,3rem)] font-bold tracking-tight text-white drop-shadow-lg">
             {userName}
           </h2>
           <p className="text-xs sm:text-lg md:text-xl text-white/90 drop-shadow font-medium mt-1">

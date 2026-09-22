@@ -152,6 +152,30 @@ body {
   }
 }
 
+.docx-viewer .docx-preview {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.docx-viewer .docx-preview > section,
+.docx-viewer .docx-preview > div {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+@media (max-width: 767px) {
+  .docx-viewer {
+    padding: 0.25rem !important;
+  }
+
+  .docx-viewer .docx-preview {
+    overflow-wrap: anywhere;
+  }
+}
+
 @keyframes float-in {
   from {
     opacity: 0;
