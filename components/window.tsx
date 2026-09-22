@@ -112,7 +112,7 @@ export function Window({ title, isActive, onFocus, onClose, onMinimize, children
               </Button>
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto overscroll-contain p-4 animate-[slide-up_0.3s_ease-out]">{children}</div>
+          <div className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain p-3 animate-[slide-up_0.3s_ease-out] sm:p-4">{children}</div>
         </div>
       </div>
     )
@@ -178,7 +178,7 @@ export function Window({ title, isActive, onFocus, onClose, onMinimize, children
             </div>
           </div>
 
-          <div className={`${isMaximized ? "flex-1 overflow-y-auto" : "max-h-[70vh] overflow-y-auto"} overscroll-contain bg-white/50 animate-[slide-up_0.3s_ease-out] p-6`}>{children}</div>
+          <div className={`${isMaximized ? "flex-1 overflow-y-auto" : "max-h-[70vh] overflow-y-auto"} min-w-0 overscroll-contain bg-white/50 animate-[slide-up_0.3s_ease-out] p-6`}>{children}</div>
         </div>
       </div>
     </div>
