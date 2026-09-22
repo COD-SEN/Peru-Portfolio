@@ -152,6 +152,30 @@ body {
   }
 }
 
+.docx-viewer .docx-preview {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.docx-viewer .docx-preview > section,
+.docx-viewer .docx-preview > div {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+@media (max-width: 767px) {
+  .docx-viewer {
+    padding: 0.25rem !important;
+  }
+
+  .docx-viewer .docx-preview {
+    overflow-wrap: anywhere;
+  }
+}
+
 @keyframes float-in {
   from {
     opacity: 0;
@@ -301,7 +325,19 @@ body {
 
 @media (max-width: 767px) {
   .docx-viewer .docx-preview {
-    font-size: 0.86rem;
+    /* Keep the original page layout intact, then scale the whole page to the viewport. */
+    width: 816px !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+    zoom: 0.34;
+    font-size: 1rem;
+  }
+
+  .docx-viewer .docx-preview section,
+  .docx-viewer .docx-preview article {
+    width: 816px !important;
+    max-width: none !important;
+    padding: 2.5rem !important;
   }
 
   .docx-viewer .docx-preview img {
