@@ -88,7 +88,7 @@ export function Window({ title, isActive, onFocus, onClose, onMinimize, children
         className="fixed inset-0 z-[60] bg-black/30 backdrop-blur-sm"
         onClick={handleBackdropClick}
       >
-        <div className="absolute inset-2 top-2 bottom-2 flex flex-col bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden">
+        <div className="absolute inset-0 flex flex-col bg-white/95 backdrop-blur-xl shadow-2xl overflow-hidden sm:inset-2 sm:top-2 sm:bottom-2 sm:rounded-2xl">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white flex-shrink-0">
             <h3 className="text-gray-800 font-semibold text-sm">{title}</h3>
             <div className="flex items-center gap-2">

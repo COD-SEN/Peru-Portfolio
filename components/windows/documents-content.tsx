@@ -43,7 +43,7 @@ function PdfViewer({ url, name }: { url: string; name: string }) {
   useEffect(() => {
     const element = viewportRef.current
     if (!element) return
-    const updateWidth = () => setPageWidth(Math.max(280, element.clientWidth - 8))
+    const updateWidth = () => setPageWidth(Math.max(1, element.clientWidth - 12))
     updateWidth()
     const observer = new ResizeObserver(updateWidth)
     observer.observe(element)
