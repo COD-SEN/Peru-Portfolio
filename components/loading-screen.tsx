@@ -87,15 +87,15 @@ export function LoadingScreen() {
     >
       {backgroundImage && <div className="absolute inset-0 bg-black/60" />}
 
-      <div className="min-h-0 flex-1 flex items-center justify-center relative z-10 overflow-hidden">
-        <div className="text-center space-y-4 px-4 sm:space-y-8">
+      <div className="relative z-10 flex min-h-0 flex-1 w-full items-center justify-center overflow-hidden px-3 py-4 sm:px-6 sm:py-8">
+        <div className="w-full max-w-3xl text-center space-y-3 sm:space-y-8">
           {/* Animated rings behind the text */}
-          <div className="relative">
+          <div className="relative mx-auto w-fit">
             <div className="mb-2 flex justify-center sm:mb-7" aria-hidden="true">
               <img
                 src="/brian-peru-mark.svg"
                 alt=""
-                className="h-10 w-10 object-contain drop-shadow-2xl sm:h-20 sm:w-20"
+                className="h-8 w-8 object-contain drop-shadow-2xl sm:h-20 sm:w-20"
               />
             </div>
             <div className="absolute inset-0 flex items-center justify-center">
@@ -114,7 +114,7 @@ export function LoadingScreen() {
             </div>
 
             {/* Main name with gradient and glow */}
-            <h1 className="relative text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter gradient-text drop-shadow-2xl animate-float-in">
+            <h1 className="relative whitespace-nowrap text-[clamp(2.75rem,14vw,9rem)] font-black leading-none tracking-tighter gradient-text drop-shadow-2xl animate-float-in">
               BRIAN
             </h1>
 
