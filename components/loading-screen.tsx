@@ -87,24 +87,24 @@ export function LoadingScreen() {
     >
       {backgroundImage && <div className="absolute inset-0 bg-black/60" />}
 
-      <div className="flex-1 flex items-center justify-center relative z-10">
-        <div className="text-center space-y-8 px-4">
+      <div className="min-h-0 flex-1 flex items-center justify-center relative z-10 overflow-hidden">
+        <div className="text-center space-y-4 px-4 sm:space-y-8">
           {/* Animated rings behind the text */}
           <div className="relative">
-            <div className="mb-5 flex justify-center sm:mb-7" aria-hidden="true">
+            <div className="mb-2 flex justify-center sm:mb-7" aria-hidden="true">
               <img
                 src="/brian-peru-mark.svg"
                 alt=""
-                className="h-16 w-16 object-contain drop-shadow-2xl sm:h-20 sm:w-20"
+                className="h-10 w-10 object-contain drop-shadow-2xl sm:h-20 sm:w-20"
               />
             </div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div
-                className="w-40 h-40 sm:w-52 sm:h-52 md:w-64 md:h-64 border-4 border-blue-500/30 rounded-full animate-ping"
+                className="w-28 h-28 sm:w-52 sm:h-52 md:w-64 md:h-64 border-4 border-blue-500/30 rounded-full animate-ping"
                 style={{ animationDuration: "3s" }}
               />
               <div
-                className="absolute w-28 h-28 sm:w-36 sm:h-36 md:w-48 md:h-48 border-4 border-purple-500/30 rounded-full animate-ping"
+                className="absolute w-20 h-20 sm:w-36 sm:h-36 md:w-48 md:h-48 border-4 border-purple-500/30 rounded-full animate-ping"
                 style={{ animationDuration: "2s", animationDelay: "0.5s" }}
               />
               <div
@@ -151,7 +151,7 @@ export function LoadingScreen() {
         </div>
       </div>
 
-      <div className="mb-16 sm:mb-24 space-y-4 sm:space-y-6 relative z-10 w-full max-w-md px-6 sm:px-8 animate-[slide-up_0.6s_ease-out]">
+      <div className="mb-6 sm:mb-24 space-y-2 sm:space-y-6 relative z-10 w-full max-w-md px-6 sm:px-8 animate-[slide-up_0.6s_ease-out]">
         <div className="flex items-center justify-between text-white/80 text-sm font-semibold">
           <span className="animate-pulse">{loadingText}</span>
           <span className="tabular-nums font-bold text-white text-lg">{percent}%</span>
