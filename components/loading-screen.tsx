@@ -89,13 +89,6 @@ export function LoadingScreen() {
         <div className="w-full max-w-3xl text-center space-y-3 sm:space-y-8">
           {/* Animated rings behind the text */}
           <div className="relative mx-auto w-fit">
-            <div className="mb-2 flex justify-center sm:mb-7" aria-hidden="true">
-              <img
-                src="/brian-peru-mark.svg"
-                alt=""
-                className="h-8 w-8 object-contain drop-shadow-2xl sm:h-20 sm:w-20"
-              />
-            </div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div
                 className="w-28 h-28 sm:w-52 sm:h-52 md:w-64 md:h-64 border-4 border-blue-500/30 rounded-full animate-ping"
