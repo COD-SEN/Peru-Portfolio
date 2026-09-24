@@ -45,18 +45,17 @@ export function LoadingScreen() {
     }
   }, [])
 
-  // Smoothly count from 0 to 100 over ~7 seconds
+  // Drive the visual progress from elapsed time so it always reaches 100% before the screen changes.
   useEffect(() => {
-    const totalDuration = 7500
-    const intervalMs = 70 // update roughly every 70ms => ~100 steps
-    let elapsed = 0
+    const totalDuration = 7800
+    let frameId = 0
+    let startedAt = 0
 
-    const timer = setInterval(() => {
-      elapsed += intervalMs
-      const progress = Math.min(100, Math.round((elapsed / totalDuration) * 100))
+    const updateProgress = (timestamp: number) => {
+      if (!startedAt) startedAt = timestamp
+      const progress = Math.min(100, Math.round(((timestamp - startedAt) / totalDuration) * 100))
       setPercent(progress)
 
-      // Pick the right loading message based on current percentage
       for (let i = LOADING_MESSAGES.length - 1; i >= 0; i--) {
         if (progress >= LOADING_MESSAGES[i].at) {
           setLoadingText(LOADING_MESSAGES[i].text)
@@ -64,12 +63,11 @@ export function LoadingScreen() {
         }
       }
 
-      if (progress >= 100) {
-        clearInterval(timer)
-      }
-    }, intervalMs)
+      if (progress < 100) frameId = window.requestAnimationFrame(updateProgress)
+    }
 
-    return () => clearInterval(timer)
+    frameId = window.requestAnimationFrame(updateProgress)
+    return () => window.cancelAnimationFrame(frameId)
   }, [])
 
   return (
