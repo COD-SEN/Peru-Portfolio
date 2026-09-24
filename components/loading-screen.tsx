@@ -17,7 +17,7 @@ const LOADING_MESSAGES = [
 
 export function LoadingScreen() {
   const [percent, setPercent] = useState(0)
-  const [backgroundImage, setBackgroundImage] = useState<string | null>(null)
+  const [backgroundImage, setBackgroundImage] = useState<string | null>("/brian-classroom-background.jpeg")
   const [loadingText, setLoadingText] = useState("Initializing system...")
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export function LoadingScreen() {
 
   // Smoothly count from 0 to 100 over ~7 seconds
   useEffect(() => {
-    const totalDuration = 7000
+    const totalDuration = 7500
     const intervalMs = 70 // update roughly every 70ms => ~100 steps
     let elapsed = 0
 
