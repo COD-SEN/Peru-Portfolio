@@ -15,7 +15,7 @@ export function MainPortfolio() {
     if (phase === "loading") {
       const timer = setTimeout(() => {
         setPhase("intro")
-      }, 1200)
+      }, 7000)
       return () => clearTimeout(timer)
     }
   }, [phase, restartKey])
